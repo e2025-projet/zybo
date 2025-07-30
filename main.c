@@ -70,6 +70,7 @@
 //Global variables
 
 u32 counter = 0;
+u16 blinker = 0;
 XGpio outputLED;
 
 
@@ -143,7 +144,7 @@ void systemInit(void)
 void MyIP_InterruptHandler(void *CallbackRef)
 {
 	XIntc_Acknowledge(&InterruptController, XPAR_MICROBLAZE_0_AXI_INTC_CALCUL_MOYENNE_DSP_DELAI_2CYCLE_Q_INTR);
-
+	/*
 	u32 valeur;
 	u32 moyenne;
 	u32 somme;
@@ -159,7 +160,7 @@ void MyIP_InterruptHandler(void *CallbackRef)
 	// lire la moyenne courante dans le registre 1 de myIP
 	moyenne =  MYIP_S4E_4REG_mReadReg(MY_IP_BASE_ADDRESS, MYIP_REG_1);
 	xil_printf("Moyenne = %d\n\r", moyenne);
-
+	 */
 }
 
 int SetupInterruptSystem()
@@ -212,6 +213,7 @@ void blinkTask()
 	{
 		XGpio_DiscreteWrite(&outputLED, 2, XGpio_DiscreteRead(&outputLED, 2) ^ 0x2);
 		counter = 0;
+		udpSendBlinker(blinker++);
 	}
 }
 

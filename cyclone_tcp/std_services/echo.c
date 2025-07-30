@@ -107,6 +107,11 @@ error_t udpEchoStart(void)
 }
 
 
+error_t error;
+size_t length;
+uint16_t port;
+IpAddr ipAddr;
+
 /**
  * @brief UDP echo service implementation
  * @param[in] param Pointer to the echo service context
@@ -114,11 +119,6 @@ error_t udpEchoStart(void)
 
 void udpEchoTask(void)
 {
-   error_t error;
-   size_t length;
-   uint16_t port;
-   IpAddr ipAddr;
-
    //Main loop
    {
       //Wait for an incoming datagram
@@ -153,4 +153,17 @@ void udpEchoTask(void)
 
       }
    }
+}
+
+
+void udpSendBlinker(u16 blinkCount) {
+	char *gamer = "blink ";
+	if (port) {
+		char gamer[32]; // Make sure the buffer is large enough
+		int len = sprintf(gamer, "blink %u", blinkCount); // Convert to ASCII and build the message
+
+		error = socketSendTo(context.socket, &ipAddr, port,
+							 gamer, len, NULL, 0);
+
+	}
 }
