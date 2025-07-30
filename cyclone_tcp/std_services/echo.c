@@ -40,6 +40,7 @@
 #include "xil_io.h"
 #include "cyclone_tcp/core/socket.h"
 #include "xil_printf.h"
+#include <stdio.h>
 
 //Check TCP/IP stack configuration
 #if (NET_STATIC_OS_RESOURCES == ENABLED)
@@ -157,10 +158,12 @@ void udpEchoTask(void)
 
 
 void udpSendBlinker(u16 blinkCount) {
-	char *gamer = "blink ";
 	if (port) {
 		char gamer[32]; // Make sure the buffer is large enough
-		int len = sprintf(gamer, "blink %u", blinkCount); // Convert to ASCII and build the message
+		int len = sprintf(gamer, "~~b{}  %u", blinkCount); // Convert to ASCII and build the message
+
+		gamer[3] = (char)(blinkCount >> 8 & 0xFF);
+		gamer[4] = (char)(blinkCount & 0xFF);
 
 		error = socketSendTo(context.socket, &ipAddr, port,
 							 gamer, len, NULL, 0);
